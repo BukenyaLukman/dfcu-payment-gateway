@@ -21,11 +21,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2) set up JDK 21
-      - name: Set up JDK 21
+      # 2) set up JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
 
@@ -37,36 +37,6 @@ jobs:
 
       # 4) build with Maven
       - name: Build with Maven
-        run: mvn -B package --file pom.xml -Dmaven.compiler.release=21
+        run: mvn -B package --file pom.xml
 
-      # 4) install Heroku CLI (needed for `heroku container:release`)
-      - name: Install Heroku CLI
-        run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-
-      # 5) log in Docker to Heroku's registry
-      - name: Log in to Heroku Container Registry
-        run: echo "$HEROKU_API_KEY" \
-               | docker login --username=_ --password-stdin registry.heroku.com
-
-      # 6) build & tag your image 
-      - name: Build & tag Docker image
-        run: |
-          docker build \
-            --build-arg CORS_ALLOWED_ORIGINS="${CORS_ALLOWED_ORIGINS}" \
-            -t dfcu-payment-gateway:latest .
-          docker tag dfcu-payment-gateway:latest \
-            registry.heroku.com/${HEROKU_APP_NAME}/web
-
-      # 7) push it up
-      - name: Push image to Heroku
-        run: docker push registry.heroku.com/${HEROKU_APP_NAME}/web
-
-      # 8) release the new image
-      - name: Release on Heroku
-        run: heroku container:release web --app ${HEROKU_APP_NAME}
-
-      # 9) smoke-test your health endpoint
-      - name: Verify deployment
-        run: |
-          curl --fail https://${HEROKU_APP_NAME}.herokuapp.com/actuator/health
+      # 4) install Heroku CLI (needed for `
