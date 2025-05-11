@@ -1,6 +1,8 @@
+# src/main/resources/application-prod.yml
+
 spring:
   datasource:
-    # Heroku provides JDBC_DATABASE_URL, USERNAME & PASSWORD
+    # Heroku provides the JDBC_DATABASE_URL, JDBC_DATABASE_USERNAME & JDBC_DATABASE_PASSWORD
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
@@ -8,25 +10,22 @@ spring:
     hikari:
       maximum-pool-size: 5
       minimum-idle: 2
-      idle-timeout: 300000 # 5 minutes
-      connection-timeout: 20000 # 20 seconds
+      idle-timeout: 300000        # 5 minutes
+      connection-timeout: 20000   # 20 seconds
+
   jpa:
-    database: POSTGRESQL
+    # Let Spring Boot pick the correct dialect from the JDBC URL
     hibernate:
       ddl-auto: update
-    show-sql: false  # Disable SQL logging in production
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+    show-sql: false                # Disable SQL logging in production
 
 server:
-  port: ${PORT:8080}  # Heroku provides PORT environment variable
+  port: ${PORT:8080}               # Heroku provides the PORT env var
   tomcat:
     max-threads: 200
     min-spare-threads: 10
 
-# CORS Configuration for production
+# CORS Configuration
 app:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
