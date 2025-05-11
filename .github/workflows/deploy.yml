@@ -36,13 +36,7 @@ jobs:
           echo "DB_PASSWORD=" >> .env
           echo "CORS_ALLOWED_ORIGINS=http://localhost:3000" >> .env
 
-      # 3) setup Maven
-      - name: Setup Maven
-        uses: stCarolas/setup-maven@v4.5
-        with:
-          maven-version: 3.9.6
-
-      # 4) build with Maven
+      # 3) build with Maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
@@ -58,11 +52,11 @@ jobs:
         run: |
           docker build \
             --build-arg SPRING_PROFILES_ACTIVE=prod \
-            --build-arg PORT=$PORT \
+            --build-arg PORT=8080 \
             -t registry.heroku.com/$HEROKU_APP_NAME/web .
           docker push registry.heroku.com/$HEROKU_APP_NAME/web
 
-      - name: Release to Heroku
+      - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
