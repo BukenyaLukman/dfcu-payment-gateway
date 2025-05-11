@@ -49,3 +49,7 @@ build/
 # Add this line
 src/main/resources/.env
 
+# Environment files
+.env
+src/main/resources/.env
+
