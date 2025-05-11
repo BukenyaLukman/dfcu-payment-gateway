@@ -46,17 +46,19 @@ jobs:
       run: |
         curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 
-    - name: Login to Heroku
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    - name: Setup Heroku Credentials
       run: |
-        heroku login -i <<EOF
-        $HEROKU_API_KEY
+        cat > ~/.netrc <<EOF
+        machine api.heroku.com
+            login ${{ secrets.HEROKU_EMAIL }}
+            password ${{ secrets.HEROKU_API_KEY }}
+        machine git.heroku.com
+            login ${{ secrets.HEROKU_EMAIL }}
+            password ${{ secrets.HEROKU_API_KEY }}
         EOF
+        chmod 600 ~/.netrc
 
     - name: Check and Set Heroku Stack
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
         # Check if app exists
         if ! heroku apps:info --app $HEROKU_APP_NAME &>/dev/null; then
@@ -78,18 +80,12 @@ jobs:
         fi
 
     - name: Login to Heroku Container Registry
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: heroku container:login
 
     - name: Build and Push Docker Image
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
         docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
         docker push registry.heroku.com/$HEROKU_APP_NAME/web
 
     - name: Release
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: heroku container:release web --app $HEROKU_APP_NAME 
