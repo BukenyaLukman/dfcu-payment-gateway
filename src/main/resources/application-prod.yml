@@ -2,33 +2,24 @@
 
 spring:
   datasource:
-    # Heroku provides these environment variables:
+    # Heroku provides these:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 5
-      minimum-idle: 2
-      idle-timeout: 300000        # 5 minutes
-      connection-timeout: 20000   # 20 seconds
 
   jpa:
-    # If you still want to explicitly set the dialect, uncomment the next line.
-    # Make sure there is NO trailing space after the class name!
-    # database-platform: org.hibernate.dialect.PostgreSQLDialect
+    # Explicitly tell Spring Boot which dialect class to use—no trailing spaces!
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
     hibernate:
       ddl-auto: update
-    show-sql: false                # disable SQL logging in production
+    show-sql: false
 
 server:
-  port: ${PORT:8080}               # Heroku sets PORT for you
-  tomcat:
-    max-threads: 200
-    min-spare-threads: 10
+  port: ${PORT:8080}
 
-# CORS Configuration (populated via your env var)
+# CORS Configuration
 app:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
