@@ -17,6 +17,6 @@ COPY --from=build /app/target/*.jar app.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
-CMD ["sh", "-c", "java -jar app.jar --spring.profiles.active=prod"]
+CMD ["java", "-jar", "app.jar"]
 
 

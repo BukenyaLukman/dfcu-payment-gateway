@@ -9,9 +9,9 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    # Explicitly tell Spring Boot which dialect class to use—no trailing spaces!
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
     hibernate:
       ddl-auto: update
     show-sql: false
