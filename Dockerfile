@@ -17,9 +17,10 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
 # Set non-sensitive environment variables with defaults
-ENV SERVER_PORT=8080 \
+ENV SPRING_PROFILES_ACTIVE=prod \
+    SERVER_PORT=8080 \
     CORS_ALLOWED_ORIGINS=http://localhost:3000
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
 
 

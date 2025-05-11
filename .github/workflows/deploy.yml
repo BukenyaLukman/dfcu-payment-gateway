@@ -56,7 +56,10 @@ jobs:
         env:
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
         run: |
-          docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
+          docker build \
+            --build-arg SPRING_PROFILES_ACTIVE=prod \
+            --build-arg PORT=$PORT \
+            -t registry.heroku.com/$HEROKU_APP_NAME/web .
           docker push registry.heroku.com/$HEROKU_APP_NAME/web
 
       - name: Release to Heroku
@@ -64,8 +67,8 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
         run: |
-          curl -X PATCH https://api.heroku.com/apps/$HEROKU_APP_NAME/formation \
+          curl --fail -X PATCH https://api.heroku.com/apps/$HEROKU_APP_NAME/formation \
             -H "Content-Type: application/json" \
             -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
             -H "Authorization: Bearer ${HEROKU_API_KEY}" \
-            -d '{"updates":[{"type":"web","docker_image":"'$(docker inspect registry.heroku.com/$HEROKU_APP_NAME/web --format={{.Id}})'"}'
+            -d '{"updates":[{"type":"web","docker_image":"'$(docker inspect registry.heroku.com/$HEROKU_APP_NAME/web --format={{.Id}})'"}]}'
