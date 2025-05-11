@@ -15,12 +15,10 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
-ENV SPRING_PROFILES_ACTIVE=prod \
-    PORT=8080
+ENV SPRING_PROFILES_ACTIVE=prod
 
 CMD ["java", \
      "-Dspring.profiles.active=prod", \
-     "-Dserver.port=${PORT}", \
      "-jar", \
      "app.jar"]
 
