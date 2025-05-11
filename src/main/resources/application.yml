@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dfcu_payment_gateway
+    username: bukenya
+    password: integration
+  jpa:
+    hibernate:
+      ddl-auto: update
