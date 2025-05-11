@@ -15,7 +15,16 @@ public class DatabaseConfig {
     @Primary
     @ConfigurationProperties("spring.datasource")
     public DataSourceProperties dataSourceProperties() {
-        return new DataSourceProperties();
+        DataSourceProperties properties = new DataSourceProperties();
+        // Set default URL if not provided
+        if (properties.getUrl() == null) {
+            String databaseUrl = System.getenv("DATABASE_URL");
+            if (databaseUrl != null && databaseUrl.startsWith("postgres://")) {
+                databaseUrl = databaseUrl.replace("postgres://", "jdbc:postgresql://");
+            }
+            properties.setUrl(databaseUrl);
+        }
+        return properties;
     }
 
     @Bean

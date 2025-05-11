@@ -2,8 +2,10 @@
 
 spring:
   datasource:
-    # Spring Boot will use SPRING_DATASOURCE_URL environment variable
-    driver-class-name: org.postgresql.Driver
+    url: ${DATABASE_URL}
+    username: ${PROD_DB_USERNAME}
+    password: ${PROD_DB_PASSWORD}
+    name: dfcu-payment-gateway
   jpa:
     # Force the exact dialect class name—no spaces before or after!
     database-platform: "org.hibernate.dialect.PostgreSQLDialect"

@@ -17,11 +17,10 @@ COPY --from=build /app/target/*.jar app.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
-# Convert DATABASE_URL to JDBC format and run
-CMD DATABASE_URL=$(echo $DATABASE_URL | sed 's|postgres://|jdbc:postgresql://|') && \
-    java -jar \
-    -Dspring.profiles.active=prod \
-    -Dspring.datasource.url="$DATABASE_URL" \
-    app.jar
+# Convert postgres:// to jdbc:postgresql:// if needed
+CMD if [ ! -z "$DATABASE_URL" ]; then \
+      export SPRING_DATASOURCE_URL=$(echo $DATABASE_URL | sed 's/postgres:\/\//jdbc:postgresql:\/\//'); \
+    fi && \
+    java -jar app.jar
 
 
