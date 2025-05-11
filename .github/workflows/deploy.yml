@@ -29,6 +29,13 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Create test env file
+        run: |
+          echo "DB_URL=jdbc:h2:mem:testdb" > .env
+          echo "DB_USERNAME=sa" >> .env
+          echo "DB_PASSWORD=" >> .env
+          echo "CORS_ALLOWED_ORIGINS=http://localhost:3000" >> .env
+
       # 3) setup Maven
       - name: Setup Maven
         uses: stCarolas/setup-maven@v4.5
