@@ -23,4 +23,6 @@ CMD if [ ! -z "$DATABASE_URL" ]; then \
     fi && \
     java -jar app.jar
 
+CMD ["java", "-jar", "app.jar"]
+
 

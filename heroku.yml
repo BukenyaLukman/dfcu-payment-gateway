@@ -8,4 +8,4 @@ build:
     web: Dockerfile
 
 run:
-  web: java -jar target/*.jar 
+  web: java -jar /app/app.jar 
