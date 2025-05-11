@@ -14,13 +14,14 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8080
 
-# Set non-sensitive environment variables with defaults
 ENV SPRING_PROFILES_ACTIVE=prod \
-    SERVER_PORT=8080 \
-    CORS_ALLOWED_ORIGINS=http://localhost:3000
+    PORT=8080
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", \
+     "-Dspring.profiles.active=prod", \
+     "-Dserver.port=${PORT}", \
+     "-jar", \
+     "app.jar"]
 
 
