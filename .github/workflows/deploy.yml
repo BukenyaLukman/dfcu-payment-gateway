@@ -1,4 +1,4 @@
-name: Deploy to Heroku via Docker
+name: Deploy to Heroku
 
 # ← triggers on every push to main
 on:
@@ -40,30 +40,11 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to Heroku Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: registry.heroku.com
-          username: _
-          password: ${{ secrets.HEROKU_API_KEY }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
-          build-args: |
-            SPRING_PROFILES_ACTIVE=prod
-            PORT=8080
-
       - name: Deploy to Heroku
-        run: |
-          curl --fail -X PATCH https://api.heroku.com/apps/${{ secrets.HEROKU_APP_NAME }}/formation \
-            -H "Content-Type: application/json" \
-            -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
-            -H "Authorization: Bearer ${{ secrets.HEROKU_API_KEY }}" \
-            -d '{"updates":[{"type":"web","docker_image":"'$(docker inspect registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web --format={{.Id}})'"}]}'
+        uses: jctaveras/heroku-deploy@v2.1.3  # A different Heroku deploy action
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}  # Add this secret
+          api_key: ${{ secrets.HEROKU_API_KEY }}
+          app_name: ${{ secrets.HEROKU_APP_NAME }}
+          dockerfile_path: ''  # Using Dockerfile in root
+          formation: 'web'    # Specify web dyno
