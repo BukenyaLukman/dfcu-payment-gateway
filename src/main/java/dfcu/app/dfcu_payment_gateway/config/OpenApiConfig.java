@@ -17,6 +17,6 @@ public class OpenApiConfig {
                         .version("1.0")
                         .contact(new Contact()
                                 .name("DFCU Bank")
-                                .email("support@dfcu.co.ug")));
+                                .email("support@dfcugroup.co.ug")));
     }
 } 
