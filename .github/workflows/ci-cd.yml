@@ -58,6 +58,22 @@ jobs:
         EOF
         chmod 600 ~/.netrc
 
+    - name: Create heroku.yml
+      run: |
+        cat > heroku.yml <<EOF
+        setup:
+          addons:
+            - plan: heroku-postgresql
+              as: DATABASE
+        
+        build:
+          docker:
+            web: Dockerfile
+        
+        run:
+          web: java -jar target/*.jar
+        EOF
+
     - name: Check and Set Heroku Stack
       run: |
         # Check if app exists
@@ -77,24 +93,6 @@ jobs:
         if [[ "$STACK" != *"container"* ]]; then
           echo "Failed to set container stack"
           exit 1
-        fi
-
-        # Ensure heroku.yml exists
-        if [ ! -f "heroku.yml" ]; then
-          echo "Creating heroku.yml..."
-          cat > heroku.yml <<EOF
-setup:
-  addons:
-    - plan: heroku-postgresql
-      as: DATABASE
-
-build:
-  docker:
-    web: Dockerfile
-
-run:
-  web: java -jar target/*.jar
-EOF
         fi
 
     - name: Login to Heroku Container Registry
