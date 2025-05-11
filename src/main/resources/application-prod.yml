@@ -2,7 +2,7 @@
 
 spring:
   datasource:
-    # Heroku provides the JDBC_DATABASE_URL, JDBC_DATABASE_USERNAME & JDBC_DATABASE_PASSWORD
+    # Heroku provides these environment variables:
     url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
@@ -14,18 +14,21 @@ spring:
       connection-timeout: 20000   # 20 seconds
 
   jpa:
-    # Let Spring Boot pick the correct dialect from the JDBC URL
+    # If you still want to explicitly set the dialect, uncomment the next line.
+    # Make sure there is NO trailing space after the class name!
+    # database-platform: org.hibernate.dialect.PostgreSQLDialect
+
     hibernate:
       ddl-auto: update
-    show-sql: false                # Disable SQL logging in production
+    show-sql: false                # disable SQL logging in production
 
 server:
-  port: ${PORT:8080}               # Heroku provides the PORT env var
+  port: ${PORT:8080}               # Heroku sets PORT for you
   tomcat:
     max-threads: 200
     min-spare-threads: 10
 
-# CORS Configuration
+# CORS Configuration (populated via your env var)
 app:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
