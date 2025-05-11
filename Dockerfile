@@ -17,6 +17,9 @@ COPY --from=build /app/target/*.jar app.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", \
+     "-Dspring.profiles.active=prod", \
+     "-Dspring.datasource.url=${JDBC_DATABASE_URL}", \
+     "-jar", "app.jar"]
 
 
