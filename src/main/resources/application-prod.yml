@@ -5,12 +5,11 @@ spring:
     # Spring Boot will use SPRING_DATASOURCE_URL environment variable
     driver-class-name: org.postgresql.Driver
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    # Force the exact dialect class name—no spaces before or after!
+    database-platform: "org.hibernate.dialect.PostgreSQLDialect"
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL82Dialect
+    show-sql: false
 
 server:
   port: ${PORT:8080}
