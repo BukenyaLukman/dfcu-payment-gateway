@@ -79,6 +79,24 @@ jobs:
           exit 1
         fi
 
+        # Ensure heroku.yml exists
+        if [ ! -f "heroku.yml" ]; then
+          echo "Creating heroku.yml..."
+          cat > heroku.yml <<EOF
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+
+build:
+  docker:
+    web: Dockerfile
+
+run:
+  web: java -jar target/*.jar
+EOF
+        fi
+
     - name: Login to Heroku Container Registry
       run: heroku container:login
 
