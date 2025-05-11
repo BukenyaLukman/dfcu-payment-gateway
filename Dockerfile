@@ -20,4 +20,6 @@ EXPOSE 8080
 ENV SERVER_PORT=8080 \
     CORS_ALLOWED_ORIGINS=http://localhost:3000
 
-ENTRYPOINT ["java", "-jar", "app.jar"] 
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+
