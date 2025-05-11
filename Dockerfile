@@ -17,9 +17,11 @@ COPY --from=build /app/target/*.jar app.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
-CMD ["java", \
-     "-Dspring.profiles.active=prod", \
-     "-Dspring.datasource.url=${JDBC_DATABASE_URL}", \
-     "-jar", "app.jar"]
+# Convert DATABASE_URL to JDBC format and run
+CMD DATABASE_URL=$(echo $DATABASE_URL | sed 's|postgres://|jdbc:postgresql://|') && \
+    java -jar \
+    -Dspring.profiles.active=prod \
+    -Dspring.datasource.url="$DATABASE_URL" \
+    app.jar
 
 
